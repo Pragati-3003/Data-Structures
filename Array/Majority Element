@@ -1,0 +1,43 @@
+169. Majority Element
+
+<!-- Question Link ==> https://leetcode.com/problems/majority-element/description/ -->
+
+Approach 1 : Moore Voting Algorithm
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        // Moore Voting Algorithm
+        /*
+        The intuition behind the Moore's Voting Algorithm is based on the 
+        fact that if there is a majority element in an array, it will    
+        always remain in the lead, even after encountering other elements.*/
+         int count = 0;
+        int candidate = 0;
+        
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;
+            }
+            
+            if (num == candidate) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+        
+        return candidate;
+    }
+};
+
+
+Approach 2:
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        return nums[n/2];
+    }
+};
