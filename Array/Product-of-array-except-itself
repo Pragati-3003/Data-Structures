@@ -1,0 +1,43 @@
+<!-- https://leetcode.com/problems/product-of-array-except-self/description/ -->
+
+Approach 1 :- Prefix Sum * Suffix Sum
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n =nums.size();
+        int pref[n];
+        int suff[n];
+        pref[0]=1;
+        suff[n-1]=1;
+        for(int i=1;i<n;i++ ){
+              pref[i]=pref[i-1]*nums[i-1];
+              suff[n-i-1]=suff[n-i]*nums[n-i];
+        }
+        for(int i=0;i<n;i++){
+            nums[i]=pref[i]*suff[i];
+        }
+        return nums;
+    }
+};
+
+
+Approach 2:- Optimised Space
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> output(n);
+        output[0] = 1;
+        for(int i=1; i<n; i++){
+            output[i] = output[i-1] * nums[i-1];
+        }
+        int right = 1;
+        for(int i=n-1; i>=0; i--){
+            output[i] *= right;
+            right *= nums[i];
+        }
+        return output;
+    }
+};

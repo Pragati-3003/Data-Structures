@@ -1,0 +1,33 @@
+<!-- https://leetcode.com/problems/subarray-sum-equals-k/ -->
+
+
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int n=nums.size(),sum=0;
+        map<int,vector<int>> mpp;
+        vector<int> vec(n);
+        for(int i=0;i<n;i++)
+        {
+            sum+=nums[i];
+            mpp[sum].push_back(i);
+            vec[i]=sum;
+
+        }
+
+        int count=0;
+
+        for(int i=0;i<n;i++)
+        {
+            
+                if(vec[i]==k)   count++;
+
+                for(auto f : mpp[vec[i]-k])
+                {
+                    if(f<i) count++;
+               }
+            
+        }
+        return count;
+    }
+};
