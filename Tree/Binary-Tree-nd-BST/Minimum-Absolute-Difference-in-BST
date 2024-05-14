@@ -1,0 +1,55 @@
+https://leetcode.com/problems/minimum-absolute-difference-in-bst/description/
+
+
+Brute Force:- 
+class Solution {
+public:
+
+    void preorder(TreeNode* root, vector<int>&v){
+        if(root == NULL){
+            return;
+        }
+        v.push_back(root->val);
+        preorder(root->left, v);
+        preorder(root->right, v);
+    }
+
+    int getMinimumDifference(TreeNode* root) {
+        vector<int>v;
+        preorder(root,v);
+        sort(v.begin(), v.end());
+        vector<int>v1;
+        int n = v.size();
+        for(int i=0;i<n-1;i++){
+            int a = abs(v[i]-v[i+ 1]);
+            v1.push_back(a);
+        }
+        sort(v1.begin(), v1.end());
+        return v1[0];
+    }
+};
+
+
+Optimal Solution :-
+
+class Solution {
+private:
+    TreeNode* prev{nullptr};
+public:
+    void dfs(TreeNode* root, int& result) {
+        if (!root) {
+            return;
+        }
+        dfs(root->left, result);
+        if (prev) {
+            result = std::min(result, std::abs(prev->val - root->val));
+        }
+        prev = root;
+        dfs(root->right, result);
+    }
+    int getMinimumDifference(TreeNode* root) {
+        int result = std::numeric_limits<int>::max();
+        dfs(root, result);
+        return result;
+    }
+};

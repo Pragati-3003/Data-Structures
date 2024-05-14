@@ -1,0 +1,52 @@
+<!-- https://leetcode.com/problems/diameter-of-binary-tree/ -->
+
+Approach 1:- 
+
+class Solution {
+public:
+    int diameter=0;
+    int maxDepth(TreeNode* root) {
+        if(!root)
+        {
+            return 0;
+        }
+        int left=  maxDepth(root->left);
+        int right= maxDepth(root->right);
+        diameter=max(diameter,left+right);
+        return 1+max(left,right);
+    }
+
+    int diameterOfBinaryTree(TreeNode* root) {
+        maxDepth(root);
+        return diameter;
+    }
+};
+
+
+Approach 2 :- 
+
+class Solution {
+public:
+
+    pair<int,int>helper(TreeNode* root){
+        if(root==NULL){
+            return{0,0};
+        }
+         pair<int,int>left=helper(root->left);
+         pair<int,int>right=helper(root->right);
+         
+         int op1=left.first;
+         int op2=right.first;
+         int op3=left.second+right.second;
+         
+          pair<int,int>ans;
+          ans.first=(max(op1,max(op2,op3)));
+          ans.second=(max(left.second,right.second)+1);
+          
+          return ans;
+    }
+
+    int diameterOfBinaryTree(TreeNode* root) {
+          return helper(root).first;
+    }
+};
