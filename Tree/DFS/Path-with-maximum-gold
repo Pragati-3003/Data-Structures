@@ -1,0 +1,49 @@
+// https://leetcode.com/problems/path-with-maximum-gold/description/?envType=daily-question&envId=2024-05-14
+
+
+class Solution {
+public:
+int n,m;
+int gold=0;
+
+    void dfs(int x,int y , int sum ,vector<vector<int>>& grid ){
+        //base condition 
+        if(x<0 || x>=n || y<0 || y>=m ||  grid[x][y] == 0)
+        return ;
+         
+         int temp = grid[x][y];
+         sum+=temp;
+         gold=max(gold,sum); // get maximum gold 
+         grid[x][y]=0 ; // avoid revisting of the cell
+
+         // walk one step to the left, right, up, or down
+         //down
+         dfs(x+1,y,sum,grid);
+         //up
+         dfs(x-1,y,sum,grid);
+          //right
+         dfs(x,y+1,sum,grid);
+         //left 
+         dfs(x,y-1,sum,grid);
+        
+
+         //backtracking
+         sum-=temp;
+        grid[x][y]=temp;
+
+    
+    }
+    int getMaximumGold(vector<vector<int>>& grid) {
+     //Approach DFS + Backtracking
+       n= grid.size();
+       m = grid[0].size();
+      for(int i=0;i<n;i++){
+        for(int j =0;j<m;j++){
+            if(grid[i][j]!=0){
+                dfs(i,j,0,grid);
+            }
+        }
+      }
+return gold;
+    }
+};
