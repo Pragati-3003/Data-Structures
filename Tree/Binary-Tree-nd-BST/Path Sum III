@@ -1,0 +1,32 @@
+<!-- https://leetcode.com/problems/path-sum-iii/ -->
+
+
+class Solution {
+public:
+    #define ll long long
+    void dfs(TreeNode* root, ll& ans, ll sum, int targetSum, unordered_map<ll,ll>& m) {
+        if(root==NULL) {
+            return;
+        }
+        sum+=root->val;
+        ans+=m[sum-targetSum];
+        if(root->left) {
+            m[sum]++;
+            dfs(root->left,ans,sum,targetSum,m);
+            m[sum]--;
+        }
+        if(root->right) {
+            m[sum]++;
+            dfs(root->right,ans,sum,targetSum,m);
+            m[sum]--;
+        }
+    }
+    int pathSum(TreeNode* root, int targetSum) {
+        unordered_map<ll,ll> mp;
+        mp[0]=1;
+        ll sum=0;
+        ll ans=0;
+        dfs(root,ans,sum,targetSum,mp);
+        return ans;
+    }
+};

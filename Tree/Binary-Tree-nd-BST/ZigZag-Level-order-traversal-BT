@@ -1,0 +1,79 @@
+<!-- https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/description/ -->
+
+
+Approach 1 :- Optimal solution
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        if(root == nullptr)
+            return result;
+        
+        bool leftToRight = true;
+        queue<TreeNode*> q;
+        q.push(root);
+        
+        while(!q.empty()) {
+            int s = q.size();
+            vector<int> level(s);
+            
+            for(int i = 0; i < s; i++) {
+                TreeNode* frontNode = q.front();
+                q.pop();
+                
+                int index = leftToRight ? i : s - i - 1;
+                level[index] = frontNode->val;
+                
+                if(frontNode->left)
+                    q.push(frontNode->left);
+                if(frontNode->right)
+                    q.push(frontNode->right);
+            }
+            
+            result.push_back(level);
+            leftToRight = !leftToRight;
+        }
+        
+        return result;
+    }
+};
+
+
+
+Approach 2 :- Brute Force
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        vector<int> temp;
+        if(root == nullptr)
+            return result;
+
+        int flag = 0;
+        queue<TreeNode*> levels;
+        levels.push(root);
+
+        while(!levels.empty()){
+            int size = levels.size();
+            TreeNode* current;
+            for(int i = 0; i < size; i++){
+                current = levels.front();
+                temp.push_back(current->val);
+                if(current->left)
+                    levels.push(current->left);
+                if(current->right)
+                    levels.push(current->right);
+                levels.pop();
+            }
+            if(flag)
+                reverse(temp.begin(),temp.end());
+            result.push_back(temp);
+            flag = (flag == 0) ? 1 : 0;
+            
+            temp.clear();
+        }
+        return result;
+    }
+};

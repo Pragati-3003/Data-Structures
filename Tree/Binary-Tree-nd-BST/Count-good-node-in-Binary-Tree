@@ -1,0 +1,22 @@
+// https://leetcode.com/problems/count-good-nodes-in-binary-tree/description/
+
+
+class Solution {
+public:
+    void helper(TreeNode* root, int &c,int maxValue) {
+        if(root==NULL)
+        return ;
+        if(root->val>=maxValue){
+            maxValue=root->val;
+            c++;
+        }
+       helper(root->left,c,maxValue);
+       helper(root->right,c,maxValue);
+    }
+    int goodNodes(TreeNode* root) {
+        int c = 0;
+        int maxValue = INT_MIN;
+         helper(root,c,maxValue);
+         return c;
+    }
+};
