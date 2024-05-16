@@ -1,0 +1,13 @@
+https://leetcode.com/problems/evaluate-boolean-binary-tree/description/
+
+
+class Solution {
+public:
+
+    bool evaluateTree(TreeNode* root) {
+       if (!root->left && !root->right) return root->val;
+        bool l=evaluateTree( root->left);  
+        bool r= evaluateTree( root->right);
+        return (root->val==3)?l&r:l|r;
+    }
+};
