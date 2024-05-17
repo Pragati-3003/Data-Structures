@@ -1,0 +1,35 @@
+https://leetcode.com/problems/maximum-width-of-binary-tree/description/
+
+
+class Solution {
+public:
+    long long widthOfBinaryTree(TreeNode* root) {
+        queue<pair<TreeNode* , int>> q;
+        q.push({root, 0});
+        long long result = 0;
+
+        while (!q.empty()) {
+            long long levelmin = q.front().second;
+            int size = q.size();
+            long long left, right;
+
+            for (int i = 0; i < size; i++) {
+                long long currValue = q.front().second - levelmin;
+                TreeNode* temp = q.front().first;
+                q.pop();
+                if (i == 0)
+                    left = currValue;
+                if (i == size - 1)
+                    right = currValue;
+
+                if (temp->left)
+                    q.push({temp->left, currValue * 2 + 1});
+                if (temp->right)
+                    q.push({temp->right, currValue * 2 + 2});
+            }
+
+            result = max(result, right - left + 1);
+        }
+        return result;
+    }
+};
