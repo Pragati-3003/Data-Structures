@@ -1,0 +1,20 @@
+
+https://leetcode.com/problems/distribute-coins-in-binary-tree/description/
+
+
+class Solution {
+public:
+    int dfs(TreeNode* root,int &ans){
+      if(root==NULL)
+      return 0;
+      int leftrequire = dfs(root->left,ans);
+      int rightrequire = dfs(root->right,ans);
+      ans += abs(leftrequire)+abs(rightrequire);
+      return (rightrequire+leftrequire+root->val)-1;
+    }
+    int distributeCoins(TreeNode* root) {
+        int ans = 0;
+        dfs(root,ans);
+        return ans;
+    }
+};
