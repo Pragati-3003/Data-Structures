@@ -1,0 +1,56 @@
+<!-- https://leetcode.com/problems/map-sum-pairs/description/ -->
+
+
+
+
+class MapSum {
+public:
+    class TrieNode {
+    public:
+        int value;
+        TrieNode* children[26];
+        map<string, int> mp;
+        TrieNode() {
+            for (int i = 0; i < 26; i++)
+                children[i] = NULL;
+            value = 0;
+        }
+
+        void add(const string& s, int v) {
+            TrieNode* t = this;
+            int add = v - mp[s];
+            for (char c : s) {
+                if (t->children[c - 'a'] == NULL) {
+                    t->children[c - 'a'] = new TrieNode();
+                }
+                t = t->children[c - 'a'];
+                t->value += add;
+            }
+            mp[s] = v;
+        }
+
+        int sum(const string& s) {
+            TrieNode* t = this;
+            for (auto c : s) {
+                if (t->children[c - 'a'] == NULL)
+                    return 0;
+                else
+                    t = t->children[c - 'a'];
+            }
+            return t->value;
+        }
+    };
+    TrieNode* root;
+    MapSum() { root = new TrieNode; }
+
+    void insert(string key, int val) { return root->add(key, val); }
+
+    int sum(string prefix) { return root->sum(prefix); }
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum* obj = new MapSum();
+ * obj->insert(key,val);
+ * int param_2 = obj->sum(prefix);
+ */
