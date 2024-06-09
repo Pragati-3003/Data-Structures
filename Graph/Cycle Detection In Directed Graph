@@ -1,0 +1,47 @@
+<!-- https://www.naukri.com/code360/problems/detect-cycle-in-a-directed-graph_1062626?leftPanelTab=0&utm_source=youtube&utm_medium=affiliate&utm_campaign=Lovebabbar&leftPanelTabValue=SUBMISSION&nps=true -->
+
+
+#include<list>
+#include<unordered_map>
+
+bool  dfs(int node,unordered_map<int,list<int>>&adj,
+ unordered_map<int,bool>&visited,
+     unordered_map<int,bool>&dfsvisited){
+       visited[node]=true;
+       dfsvisited[node]=true;
+       for(auto i : adj[node]){
+          if(!visited[i]){
+            bool cycledetection = dfs(i,adj,visited,dfsvisited);
+            if(cycledetection)
+            return true;
+          }
+          else if (dfsvisited[i]){
+              return true;
+          }
+       }
+       dfsvisited[node]=false;
+       return false;
+     }
+
+int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+  // Write your code here.
+  unordered_map<int,list<int>>adj;
+  for (int i = 0; i < edges.size(); i++) {
+          int u = edges[i].first;
+          int v = edges[i].second;
+          adj[u].push_back(v);
+  }
+    unordered_map<int,bool>visited;
+     unordered_map<int,bool>dfsvisited;
+     for(int  i =0;i<n;i++){
+
+       if(!visited[i]){
+         int ans = dfs(i,adj,visited,dfsvisited);
+         if(ans==1){
+           return true;
+         }
+       }
+     }
+  
+  return false;
+}
