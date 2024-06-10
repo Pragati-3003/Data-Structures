@@ -1,0 +1,37 @@
+
+// https://www.naukri.com/code360/problems/topological-sort_982938?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&utm_source=youtube&utm_medium=affiliate&utm_campaign=Lovebabbar&leftPanelTabValue=PROBLEM
+
+
+
+#include <bits/stdc++.h> 
+#include <queue>
+
+vector<int> topologicalSort(vector<vector<int>> &edges, int v, int e)  {
+    // Write your code here
+    vector<int> adj[v];
+    vector<int> ans; 
+    vector<int> indegree(v,0);
+    for(auto i:edges) {
+        adj[i[0]].push_back(i[1]);
+        indegree[i[1]]++;
+    }
+    queue<int> q;
+    for(int i=0;i<v;i++) {
+        if(indegree[i]==0) {
+            q.push(i);
+        }
+    }
+    while(!q.empty()){
+        int t = q.front();
+        ans.push_back(t);
+        q.pop();
+        for(auto i:adj[t]) {
+            indegree[i]--;
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+    }
+
+    return ans;
+}
