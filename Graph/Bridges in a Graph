@@ -1,0 +1,90 @@
+// https://www.naukri.com/code360/problems/bridges-in-graph_893026?leftPanelTab=0&utm_source=youtube&utm_medium=affiliate&utm_campaign=Lovebabbar&leftPanelTabValue=PROBLEM&nps=true
+
+
+
+
+void dfs(vector<vector<int>> &graph, vector<vector<int>> &allBridges, vector<bool> &visited, vector<int> &in, vector<int> &low, int parent, int currentVertex, int &time)
+{
+    // Mark currentVertex as visited.
+    visited[currentVertex] = true;
+
+    // Initialize discovery time and low value
+    low[currentVertex] = in[currentVertex] = ++time;
+
+    
+    for (int i = 0; i < graph[currentVertex].size(); i++)
+    {
+        int child = graph[currentVertex][i];
+
+        
+        if (!visited[child])
+        {
+            dfs(graph, allBridges, visited, in, low, currentVertex, child, time);
+
+            low[currentVertex] = min(low[child], low[currentVertex]);
+
+            if (low[child] > in[currentVertex])
+            {
+                 vector<int> edge(2);
+                edge[0] = currentVertex;
+                edge[1] = child;
+                allBridges.push_back(edge);
+            }
+        }
+
+        else if (child != parent)
+        {
+            // If adjacent vertex is alreedy visited before, then update the low of currentVertex.
+            low[currentVertex] = min(low[currentVertex], in[child]);
+        }
+    }
+}
+
+// Function to add edge to graph.
+void addedge(vector<vector<int>> &graph, int a, int b)
+{
+    graph[a].push_back(b);
+    graph[b].push_back(a);
+}
+
+vector<vector<int>> findBridges(vector<vector<int>> &edges, int v, int e)
+{
+    vector<vector<int>> graph(v);
+
+    // Adding edges in the graph.
+    for (int ei = 0; ei < e; ei++)
+    {
+        int a = edges[ei][0];
+        int b = edges[ei][1];
+
+        addedge(graph, a, b);
+    }
+
+    // Initialise time to 0
+    int time = 0;
+
+    // It keep track of visited vertices.
+    vector<bool> visited(v);
+
+    // It stores discovery time of every vertex
+    vector<int> in(v);
+
+    // For every vertex it stores, the discovery time of the earliest discovered
+    // vertex to which or any of the vertices in the subtree rooted at is
+    // having a back edge.
+    vector<int> low(v);
+
+    vector<vector<int>> allBridges;
+
+    // Call the recursive helper function to find bridges in DFS tree rooted with
+    // vertex i.
+    for (int i = 0; i < v; i++)
+    {
+        if (!visited[i])
+        {
+            dfs(graph, allBridges, visited, in, low, -1, i, time);
+        }
+    }
+
+    return allBridges;
+}

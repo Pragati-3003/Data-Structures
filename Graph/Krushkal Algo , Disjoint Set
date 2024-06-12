@@ -1,0 +1,95 @@
+<!-- https://www.naukri.com/code360/problems/minimum-spanning-tree_631769?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&utm_source=youtube&utm_medium=affiliate&utm_campaign=Lovebabbar&nps=true&leftPanelTabValue=PROBLEM -->
+
+
+
+
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// Comparator for sorting edges in increasing order of their weights
+bool sortByWeight(const vector<int>& edge1, const vector<int>& edge2)
+{
+    return edge1[2] < edge2[2];
+}
+
+// Finding the set of a node
+// (Uses path compression technique)
+int findSet(vector<int>& parent, int node)
+{
+    if (node == parent[node])
+        return node;
+    return parent[node] = findSet(parent, parent[node]);
+}
+
+// Function to initialize a set
+void makeSet(vector<int>& parent, vector<int>& rank, int node)
+{
+    parent[node] = node;
+    rank[node] = 0;
+}
+
+// Function that does the union of two sets
+void unionSet(vector<int>& parent,vector<int>& rank, int set1, int set2)
+{
+    set1 = findSet(parent, set1);
+    set2 = findSet(parent, set2);
+
+    if (set1 != set2)
+    {
+        if (rank[set1] < rank[set2])
+        {
+            swap(set1, set2);
+        }
+
+        parent[set2] = set1;
+
+        if (rank[set1] == rank[set2])
+        {
+            rank[set1]++;
+        }
+    }
+}
+
+// Function which returns weight of the MST of a graph
+int minimumSpanningTree(vector<vector<int>>& edges, int n)
+{
+    // Sort edges by increasing order of their weight
+    sort(edges.begin(), edges.end(), sortByWeight);
+
+    // Variable to store weight of MST
+    int finalWeight = 0;
+
+
+    vector<int> parent(n);
+    vector<int> rank(n);
+
+    // Initializing all sets
+    for (int i = 0; i < n; i++)
+    {
+        makeSet(parent, rank, i);
+    }
+
+    // Traverse through edges in increasing order of their weights
+    for (int i = 0; i < edges.size(); i++)
+    {
+        // Find the set for each node in the edge
+        int set1 = findSet(parent, edges[i][0]);
+        int set2 = findSet(parent, edges[i][1]);
+
+        // If both sets are different, perform union
+        // And add this edge to our final MST, hence add its weight to final weight
+
+        // Avoiding cycle
+        if(set1 != set2)
+        {
+            finalWeight += edges[i][2];
+
+            // Perform union
+            unionSet(parent,rank, set1, set2);
+        }
+    }
+
+    // Return weight of MST
+    return finalWeight;
+}
