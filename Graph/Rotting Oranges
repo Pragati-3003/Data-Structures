@@ -1,0 +1,47 @@
+<!-- https://leetcode.com/problems/rotting-oranges/description/ -->
+
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        int fresh = 0;
+        int count = 0;
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        queue<pair<pair<int, int>, int>> q;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 2) {
+                    vis[i][j] = 2;
+                    q.push({{i, j}, 0});
+                } else if (grid[i][j] == 1) {
+                    fresh++;
+                }
+            }
+        }
+        int drow[4] = {+1, 0, -1, 0};
+        int dcol[4] = {0, +1, 0, -1};
+        int tmax = 0;
+        while (!q.empty()) {
+            int x = q.front().first.first;
+            int y = q.front().first.second;
+            int t = q.front().second;
+            q.pop();
+            tmax= max(tmax,t);
+            for (int i = 0; i < 4; i++) {
+                int nx = x + drow[i];
+                int ny = y + dcol[i];
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m &&
+                    grid[nx][ny] != 2 && grid[nx][ny] == 1 &&vis[nx][ny]==0) {
+                    count++;
+                    vis[nx][ny] = 2;
+                    q.push({{nx, ny}, t + 1});
+                }
+            }
+        }
+        if (count == fresh)
+            return tmax;
+        else
+            return -1;
+    }
+};
